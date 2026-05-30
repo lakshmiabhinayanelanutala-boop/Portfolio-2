@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nelanutala Lakshmi Abhinaya — Finance & Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a08;
+    --bg2: #111110;
+    --bg3: #181815;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dim: #7a6330;
+    --cream: #f0ead8;
+    --cream-dim: #a09880;
+    --white: #faf8f2;
+    --accent: #4c8fc9;
+    --red: #c94c4c;
+    --border: rgba(201,168,76,0.18);
+    --border-dim: rgba(201,168,76,0.07);
+    --mono: 'DM Mono', monospace;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: var(--sans);
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  /* === CUSTOM CURSOR === */
+  .cursor {
+    position: fixed; width: 10px; height: 10px;
+    background: var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed; width: 36px; height: 36px;
+    border: 1px solid var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.35s cubic-bezier(.25,.46,.45,.94), width 0.3s, height 0.3s, opacity 0.3s;
+    opacity: 0.5;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* === NOISE OVERLAY === */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1; opacity: 0.4;
+  }
+
+  /* === NAVIGATION === */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 4rem;
+    background: linear-gradient(180deg, rgba(10,10,8,0.95) 0%, transparent 100%);
+    backdrop-filter: blur(2px);
+  }
+  .nav-logo {
+    font-family: var(--serif); font-size: 1.1rem; font-weight: 300;
+    color: var(--gold); letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--mono); font-size: 0.72rem;
+    color: var(--cream-dim); text-decoration: none;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+    background: var(--gold); transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* === HERO === */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg-text {
+    position: absolute; bottom: -2rem; right: -1rem;
+    font-family: var(--serif); font-size: clamp(8rem, 18vw, 22rem);
+    font-weight: 300; font-style: italic;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,168,76,0.07);
+    line-height: 1; pointer-events: none; user-select: none;
+    white-space: nowrap;
+  }
+  .hero-line {
+    position: absolute; top: 0; left: 50%;
+    width: 1px; height: 100%;
+    background: linear-gradient(180deg, transparent 0%, var(--gold-dim) 50%, transparent 100%);
+    opacity: 0.3;
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+  .hero-tag {
+    font-family: var(--mono); font-size: 0.7rem;
+    color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .hero-tag::before {
+    content: ''; width: 40px; height: 1px; background: var(--gold);
+  }
+  .hero-name {
+    font-family: var(--serif); font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 300; line-height: 1.05;
+    color: var(--white); margin-bottom: 0.5rem;
+  }
+  .hero-name span { font-style: italic; color: var(--gold); }
+  .hero-sub {
+    font-family: var(--mono); font-size: 0.82rem;
+    color: var(--cream-dim); letter-spacing: 0.06em;
+    margin-bottom: 2.5rem; line-height: 1.8;
+  }
+  .hero-desc {
+    font-family: var(--serif); font-size: 1.25rem; font-weight: 300;
+    color: var(--cream-dim); max-width: 560px; line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+  .hero-cta {
+    display: flex; gap: 1.5rem; flex-wrap: wrap;
+  }
+  .btn-primary {
+    font-family: var(--mono); font-size: 0.72rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--bg); background: var(--gold);
+    padding: 1rem 2.5rem; text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--gold-light); transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-outline {
+    font-family: var(--mono); font-size: 0.72rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid var(--gold-dim);
+    padding: 1rem 2.5rem; text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .btn-outline:hover { background: rgba(201,168,76,0.08); border-color: var(--gold); }
+
+  .hero-scroll {
+    position: absolute; bottom: 3rem; left: 4rem;
+    display: flex; align-items: center; gap: 1rem;
+    font-family: var(--mono); font-size: 0.65rem;
+    color: var(--gold-dim); letter-spacing: 0.15em; text-transform: uppercase;
+    animation: scrollPulse 2.5s ease-in-out infinite;
+  }
+  .hero-scroll::before {
+    content: ''; width: 1px; height: 60px;
+    background: linear-gradient(180deg, var(--gold-dim), transparent);
+    animation: lineDrop 2.5s ease-in-out infinite;
+  }
+  @keyframes scrollPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+  @keyframes lineDrop { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1)} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+  /* === SECTION COMMONS === */
+  section { padding: 7rem 4rem; position: relative; }
+  .section-header {
+    display: flex; align-items: baseline; gap: 2rem;
+    margin-bottom: 4rem;
+  }
+  .section-num {
+    font-family: var(--mono); font-size: 0.7rem;
+    color: var(--gold); letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-family: var(--serif); font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 300; color: var(--white);
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-line {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+    margin-left: 1rem;
+  }
+
+  /* === ABOUT === */
+  #about { background: var(--bg2); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: start;
+  }
+  .about-text p {
+    font-family: var(--serif); font-size: 1.2rem; font-weight: 300;
+    color: var(--cream-dim); line-height: 1.9; margin-bottom: 1.5rem;
+  }
+  .about-text p strong { color: var(--gold); font-weight: 400; }
+  .about-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  }
+  .stat-card {
+    border: 1px solid var(--border-dim);
+    padding: 2rem 1.5rem;
+    background: var(--bg3);
+    position: relative; overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .stat-card:hover { border-color: var(--border); transform: translateY(-4px); }
+  .stat-card:hover::before { transform: scaleX(1); }
+  .stat-num {
+    font-family: var(--serif); font-size: 2.8rem;
+    color: var(--gold); font-weight: 300; line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .stat-label {
+    font-family: var(--mono); font-size: 0.68rem;
+    color: var(--cream-dim); letter-spacing: 0.12em; text-transform: uppercase;
+  }
+
+  /* === SKILLS === */
+  #skills { background: var(--bg); }
+  .skills-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px; background: var(--border-dim);
+    border: 1px solid var(--border-dim);
+  }
+  .skill-group {
+    background: var(--bg); padding: 2.5rem;
+    transition: background 0.3s;
+  }
+  .skill-group:hover { background: var(--bg3); }
+  .skill-group-title {
+    font-family: var(--mono); font-size: 0.68rem;
+    color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .skill-group-title::after { content: ''; flex: 1; height: 1px; background: var(--border-dim); }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .skill-tag {
+    font-family: var(--mono); font-size: 0.68rem;
+    color: var(--cream-dim); letter-spacing: 0.08em;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--border-dim);
+    transition: all 0.3s;
+  }
+  .skill-tag:hover { color: var(--gold); border-color: var(--gold-dim); background: rgba(201,168,76,0.05); }
+
+  /* === PROJECTS === */
+  #projects { background: var(--bg2); }
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .project-card {
+    border: 1px solid var(--border-dim);
+    padding: 2.5rem;
+    background: var(--bg);
+    position: relative; overflow: hidden;
+    transition: all 0.4s cubic-bezier(.25,.46,.45,.94);
+    cursor: pointer;
+    group: true;
+  }
+  .project-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.04) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .project-card:hover { transform: translateY(-6px); border-color: var(--border); }
+  .project-card:hover::after { opacity: 1; }
+  .project-card.featured {
+    grid-column: span 2;
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem;
+  }
+  .project-num {
+    font-family: var(--mono); font-size: 0.65rem;
+    color: var(--gold-dim); letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+  }
+  .project-title {
+    font-family: var(--serif); font-size: 1.6rem;
+    font-weight: 300; color: var(--white);
+    line-height: 1.3; margin-bottom: 1rem;
+  }
+  .project-title em { font-style: italic; color: var(--gold); }
+  .project-desc {
+    font-family: var(--serif); font-size: 1rem;
+    color: var(--cream-dim); line-height: 1.8;
+    font-weight: 300; margin-bottom: 2rem;
+  }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .project-tag {
+    font-family: var(--mono); font-size: 0.62rem;
+    color: var(--gold-dim); letter-spacing: 0.1em;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--border-dim);
+  }
+  .project-visual {
+    background: var(--bg3);
+    border: 1px solid var(--border-dim);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden; min-height: 180px;
+  }
+  .project-visual svg { opacity: 0.15; transition: opacity 0.3s; }
+  .project-card:hover .project-visual svg { opacity: 0.35; }
+  .project-visual-grid {
+    display: grid; grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 2px; width: 85%; height: 75%;
+  }
+  .pv-bar {
+    background: var(--gold);
+    border-radius: 1px;
+    transform-origin: bottom;
+    animation: barGrow 1.5s ease-out forwards;
+    opacity: 0.6;
+  }
+  @keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  .project-arrow {
+    position: absolute; bottom: 2rem; right: 2rem;
+    width: 36px; height: 36px;
+    border: 1px solid var(--border-dim);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold-dim); font-size: 1rem;
+    transition: all 0.3s;
+  }
+  .project-card:hover .project-arrow {
+    background: var(--gold); color: var(--bg);
+    border-color: var(--gold); transform: rotate(45deg);
+  }
+
+  /* === CERTIFICATIONS === */
+  #certifications { background: var(--bg); }
+  .certs-list { display: flex; flex-direction: column; gap: 1px; }
+  .cert-item {
+    display: flex; align-items: center;
+    gap: 3rem; padding: 2rem 2.5rem;
+    background: var(--bg2);
+    border: 1px solid var(--border-dim);
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .cert-item::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--gold);
+    transform: scaleY(0); transform-origin: bottom;
+    transition: transform 0.4s ease;
+  }
+  .cert-item:hover { background: var(--bg3); border-color: var(--border); padding-left: 3rem; }
+  .cert-item:hover::before { transform: scaleY(1); }
+  .cert-icon {
+    width: 48px; height: 48px; flex-shrink: 0;
+    border: 1px solid var(--border-dim);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 1.2rem;
+  }
+  .cert-body { flex: 1; }
+  .cert-title {
+    font-family: var(--serif); font-size: 1.2rem;
+    font-weight: 300; color: var(--white); margin-bottom: 0.4rem;
+  }
+  .cert-issuer {
+    font-family: var(--mono); font-size: 0.68rem;
+    color: var(--gold-dim); letter-spacing: 0.1em;
+  }
+  .cert-badge {
+    font-family: var(--mono); font-size: 0.62rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.35rem 0.9rem;
+    color: var(--gold); border: 1px solid var(--gold-dim);
+    white-space: nowrap;
+  }
+
+  /* === EXPERIENCE === */
+  #experience { background: var(--bg2); }
+  .exp-item {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 4rem; padding: 3rem 0;
+    border-bottom: 1px solid var(--border-dim);
+  }
+  .exp-item:last-child { border-bottom: none; }
+  .exp-meta { padding-top: 0.25rem; }
+  .exp-company {
+    font-family: var(--mono); font-size: 0.72rem;
+    color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .exp-period {
+    font-family: var(--mono); font-size: 0.65rem;
+    color: var(--cream-dim); letter-spacing: 0.08em;
+  }
+  .exp-role {
+    font-family: var(--serif); font-size: 1.8rem;
+    font-weight: 300; color: var(--white);
+    margin-bottom: 1rem; line-height: 1.2;
+  }
+  .exp-desc {
+    font-family: var(--serif); font-size: 1.05rem;
+    color: var(--cream-dim); line-height: 1.8; font-weight: 300;
+  }
+
+  /* === EDUCATION === */
+  #education { background: var(--bg); }
+  .edu-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem;
+  }
+  .edu-card {
+    border: 1px solid var(--border-dim);
+    padding: 2.5rem 2rem;
+    position: relative; overflow: hidden;
+    transition: all 0.35s;
+    background: var(--bg2);
+  }
+  .edu-card.primary { border-color: var(--gold-dim); background: var(--bg3); }
+  .edu-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-dim), transparent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .edu-card:hover { transform: translateY(-5px); }
+  .edu-card:hover::after { transform: scaleX(1); }
+  .edu-inst {
+    font-family: var(--mono); font-size: 0.65rem;
+    color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .edu-degree {
+    font-family: var(--serif); font-size: 1.25rem;
+    font-weight: 300; color: var(--white); margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+  .edu-details {
+    font-family: var(--mono); font-size: 0.68rem;
+    color: var(--cream-dim); letter-spacing: 0.06em; line-height: 1.8;
+  }
+  .edu-cgpa {
+    margin-top: 1.5rem;
+    font-family: var(--serif); font-size: 2rem;
+    color: var(--gold); font-weight: 300;
+  }
+  .edu-cgpa-label {
+    font-family: var(--mono); font-size: 0.6rem;
+    color: var(--cream-dim); letter-spacing: 0.12em; text-transform: uppercase;
+  }
+
+  /* === CONTACT === */
+  #contact {
+    background: var(--bg2);
+    text-align: center;
+  }
+  .contact-headline {
+    font-family: var(--serif); font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 300; color: var(--white); line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  .contact-headline em { font-style: italic; color: var(--gold); }
+  .contact-sub {
+    font-family: var(--serif); font-size: 1.1rem;
+    color: var(--cream-dim); font-weight: 300;
+    margin-bottom: 3.5rem; max-width: 500px; margin-left: auto; margin-right: auto;
+  }
+  .contact-links {
+    display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
+    margin-bottom: 5rem;
+  }
+  .contact-link {
+    font-family: var(--mono); font-size: 0.75rem;
+    color: var(--cream-dim); text-decoration: none;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.75rem;
+    border: 1px solid var(--border-dim); padding: 1rem 2rem;
+    transition: all 0.3s;
+  }
+  .contact-link:hover { color: var(--gold); border-color: var(--gold-dim); background: rgba(201,168,76,0.06); }
+
+  /* === FOOTER === */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border-dim);
+    padding: 2rem 4rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-text {
+    font-family: var(--mono); font-size: 0.65rem;
+    color: var(--cream-dim); letter-spacing: 0.1em;
+  }
+  .footer-gold { color: var(--gold); }
+
+  /* === REVEAL ANIMATIONS === */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* === HERO ENTRANCE === */
+  .hero-tag { opacity: 0; animation: fadeUp 0.7s ease 0.3s forwards; }
+  .hero-name { opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards; }
+  .hero-sub { opacity: 0; animation: fadeUp 0.7s ease 0.7s forwards; }
+  .hero-desc { opacity: 0; animation: fadeUp 0.7s ease 0.85s forwards; }
+  .hero-cta { opacity: 0; animation: fadeUp 0.7s ease 1s forwards; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* === GOLD DIVIDER === */
+  .gold-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    margin: 0 4rem;
+  }
+
+  /* === TICKER === */
+  .ticker-wrap {
+    background: var(--bg3); border-top: 1px solid var(--border-dim);
+    border-bottom: 1px solid var(--border-dim);
+    overflow: hidden; padding: 0.75rem 0;
+  }
+  .ticker {
+    display: flex; gap: 0;
+    animation: ticker 20s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-item {
+    font-family: var(--mono); font-size: 0.65rem;
+    color: var(--gold-dim); letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 0 3rem; display: flex; align-items: center; gap: 1.5rem;
+  }
+  .ticker-item::after { content: '◆'; color: var(--gold); font-size: 0.4rem; }
+  @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    #hero { padding: 7rem 1.5rem 3rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+    .project-visual { min-height: 140px; }
+    .edu-grid { grid-template-columns: 1fr; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    .hero-scroll { display: none; }
+    .gold-divider { margin: 0 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- Navigation -->
+<nav>
+  <a href="#hero" class="nav-logo">N · L · A</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="hero-line"></div>
+  <div class="hero-bg-text">Finance</div>
+  <div class="hero-content">
+    <div class="hero-tag">MBA · Finance & Analytics · Woxsen University</div>
+    <h1 class="hero-name">
+      Nelanutala<br>
+      Lakshmi <span>Abhinaya</span>
+    </h1>
+    <div class="hero-sub">
+      MBA Student · Finance Specialization · Bloomberg Certified · Class of 2027
+    </div>
+    <p class="hero-desc">
+      Finance enthusiast with a sharp focus on investments, business analysis, and financial markets. Skilled in financial modelling, KPI tracking, and data-driven decision-making.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary"><span>View Projects →</span></a>
+      <a href="#contact" class="btn-outline">Get in Touch</a>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll to Explore</div>
+</section>
+
+<!-- Ticker -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">Financial Statement Analysis</span>
+    <span class="ticker-item">Bloomberg Market Concepts</span>
+    <span class="ticker-item">Python Sentiment Analysis</span>
+    <span class="ticker-item">3-Statement Modelling</span>
+    <span class="ticker-item">Power BI · Tableau · SQL</span>
+    <span class="ticker-item">Cost Management</span>
+    <span class="ticker-item">Budget & Control</span>
+    <span class="ticker-item">Supply Chain Analytics</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="ticker-item">Financial Statement Analysis</span>
+    <span class="ticker-item">Bloomberg Market Concepts</span>
+    <span class="ticker-item">Python Sentiment Analysis</span>
+    <span class="ticker-item">3-Statement Modelling</span>
+    <span class="ticker-item">Power BI · Tableau · SQL</span>
+    <span class="ticker-item">Cost Management</span>
+    <span class="ticker-item">Budget & Control</span>
+    <span class="ticker-item">Supply Chain Analytics</span>
+  </div>
+</div>
+
+<!-- About -->
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">About <em>Me</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal reveal-delay-1">
+      <p>I'm an <strong>MBA student at Woxsen University</strong> with a finance specialisation, deeply interested in investments, business analysis, and financial markets.</p>
+      <p>My strengths lie in <strong>financial reporting, KPI tracking,</strong> and interpreting revenue, cost, and profitability trends to support evidence-based decision-making.</p>
+      <p>Proficient in <strong>Excel financial modelling, Power BI, SQL, and Python</strong>, I bring analytical rigour and a passion for uncovering insights from complex financial data sets.</p>
+    </div>
+    <div class="about-stats reveal reveal-delay-2">
+      <div class="stat-card">
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Projects Completed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Certifications</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">BMC</div>
+        <div class="stat-label">Bloomberg Certified</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">2027</div>
+        <div class="stat-label">MBA Passout Year</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- Skills -->
+<section id="skills">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Core <em>Skills</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Finance</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Financial Statement Analysis</span>
+        <span class="skill-tag">Budget & Control</span>
+        <span class="skill-tag">Cost Management</span>
+        <span class="skill-tag">Financial Modelling</span>
+        <span class="skill-tag">KPI Tracking</span>
+        <span class="skill-tag">Forecasting</span>
+      </div>
+    </div>
+    <div class="skill-group reveal reveal-delay-1">
+      <div class="skill-group-title">Analytics & Data</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Power BI</span>
+        <span class="skill-tag">Tableau</span>
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">Advanced Excel</span>
+        <span class="skill-tag">Bloomberg Terminal</span>
+      </div>
+    </div>
+    <div class="skill-group reveal reveal-delay-2">
+      <div class="skill-group-title">Tools & Platforms</div>
+      <div class="skill-tags">
+        <span class="skill-tag">MS Office Suite</span>
+        <span class="skill-tag">Bloomberg BMC</span>
+        <span class="skill-tag">Sentiment Analysis</span>
+        <span class="skill-tag">Stock Market Analysis</span>
+        <span class="skill-tag">Supply Chain Analytics</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Featured <em>Projects</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-grid">
+
+    <!-- Featured project -->
+    <div class="project-card featured reveal">
+      <div>
+        <div class="project-num">PROJECT — 01 / FEATURED</div>
+        <h3 class="project-title">Toyota vs Tesla: Python <em>Sentiment & Risk</em> Analysis</h3>
+        <p class="project-desc">Conducted an in-depth comparative analysis of Toyota and Tesla using Python-based sentiment analysis. Evaluated stock volatility patterns, investor behaviour signals, and market risk metrics to draw meaningful insights from public financial data.</p>
+        <div class="project-tags">
+          <span class="project-tag">Python</span>
+          <span class="project-tag">Sentiment Analysis</span>
+          <span class="project-tag">Stock Volatility</span>
+          <span class="project-tag">Risk Analysis</span>
+          <span class="project-tag">Investor Behaviour</span>
+        </div>
+      </div>
+      <div class="project-visual">
+        <svg width="100%" height="100%" viewBox="0 0 300 180" fill="none">
+          <polyline points="10,150 50,110 90,125 130,70 170,90 210,45 250,60 290,30"
+            stroke="#c9a84c" stroke-width="2" fill="none"/>
+          <polyline points="10,160 50,140 90,155 130,120 170,135 210,100 250,115 290,90"
+            stroke="#4c8fc9" stroke-width="2" fill="none" stroke-dasharray="6 4"/>
+          <circle cx="210" cy="45" r="5" fill="#c9a84c"/>
+          <circle cx="130" cy="70" r="5" fill="#c9a84c"/>
+        </svg>
+        <div class="project-arrow">↗</div>
+      </div>
+    </div>
+
+    <!-- Project 2 -->
+    <div class="project-card reveal reveal-delay-1">
+      <div class="project-num">PROJECT — 02</div>
+      <h3 class="project-title">Equitas Bank <em>3-Statement</em> Financial Model</h3>
+      <p class="project-desc">Built a comprehensive 3-statement projection model (P&L, Balance Sheet, Cash Flow) for Equitas Small Finance Bank using Bloomberg Terminal data and Excel, including a dedicated Drivers sheet for dynamic assumptions.</p>
+      <div class="project-tags">
+        <span class="project-tag">Excel</span>
+        <span class="project-tag">Bloomberg Terminal</span>
+        <span class="project-tag">Financial Modelling</span>
+        <span class="project-tag">SFB Analysis</span>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+
+    <!-- Project 3 -->
+    <div class="project-card reveal reveal-delay-2">
+      <div class="project-num">PROJECT — 03</div>
+      <h3 class="project-title">AI-Driven <em>Warehouse Robotics</em></h3>
+      <p class="project-desc">A business analytics project examining robotic automation for supply chain optimisation. Identified key productivity drivers, efficiency metrics, and quantified the impact of automation on operational throughput.</p>
+      <div class="project-tags">
+        <span class="project-tag">Business Analytics</span>
+        <span class="project-tag">Supply Chain</span>
+        <span class="project-tag">Automation</span>
+        <span class="project-tag">KPI Analysis</span>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+
+    <!-- Project 4 -->
+    <div class="project-card reveal reveal-delay-1" style="grid-column: span 2;">
+      <div class="project-num">PROJECT — 04</div>
+      <h3 class="project-title">Financial Data <em>Analysis Web App</em></h3>
+      <p class="project-desc">Developed a functional chat application tailored for financial data analysis, enabling users to explore and query financial datasets interactively. Built to demonstrate the integration of AI tools with financial workflows.</p>
+      <div class="project-tags">
+        <span class="project-tag">Web App</span>
+        <span class="project-tag">Financial Data</span>
+        <span class="project-tag">AI Integration</span>
+        <span class="project-tag">Data Analysis</span>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Certifications -->
+<section id="certifications">
+  <div class="section-header reveal">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Certifi<em>cations</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="certs-list">
+    <div class="cert-item reveal">
+      <div class="cert-icon">◈</div>
+      <div class="cert-body">
+        <div class="cert-title">Bloomberg Market Concepts (BMC)</div>
+        <div class="cert-issuer">Bloomberg LP · Financial Markets Certification</div>
+      </div>
+      <div class="cert-badge">Certified</div>
+    </div>
+    <div class="cert-item reveal reveal-delay-1">
+      <div class="cert-icon">◉</div>
+      <div class="cert-body">
+        <div class="cert-title">Understanding Financial Markets</div>
+        <div class="cert-issuer">University of Geneva · Coursera</div>
+      </div>
+      <div class="cert-badge">Completed</div>
+    </div>
+    <div class="cert-item reveal reveal-delay-2">
+      <div class="cert-icon">◎</div>
+      <div class="cert-body">
+        <div class="cert-title">Cost Accountant (CMA) Foundation & Intermediate</div>
+        <div class="cert-issuer">Institute of Cost Accountants of India · ICMAI</div>
+      </div>
+      <div class="cert-badge">Foundation ✓</div>
+    </div>
+    <div class="cert-item reveal reveal-delay-3">
+      <div class="cert-icon">▣</div>
+      <div class="cert-body">
+        <div class="cert-title">MS Office Complete Training</div>
+        <div class="cert-issuer">Udemy · Excel, Word, PowerPoint & More</div>
+      </div>
+      <div class="cert-badge">Completed</div>
+    </div>
+    <div class="cert-item reveal reveal-delay-4">
+      <div class="cert-icon">⬡</div>
+      <div class="cert-body">
+        <div class="cert-title">Complete Python Developer Course</div>
+        <div class="cert-issuer">Udemy · Python for Data Analysis & Development</div>
+      </div>
+      <div class="cert-badge">Completed</div>
+    </div>
+  </div>
+</section>
+
+<!-- Experience -->
+<section id="experience">
+  <div class="section-header reveal">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Experi<em>ence</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="exp-item reveal">
+    <div class="exp-meta">
+      <div class="exp-company">Vision Computers</div>
+      <div class="exp-period">Internship · Vijayawada, AP</div>
+    </div>
+    <div>
+      <h3 class="exp-role">Digital Marketing Specialist</h3>
+      <p class="exp-desc">
+        Supported digital marketing initiatives for a technology firm in Vijayawada, gaining hands-on experience in content strategy, campaign management, and online brand positioning. Developed analytical skills in tracking marketing KPIs and performance metrics.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Education -->
+<section id="education">
+  <div class="section-header reveal">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Educa<em>tion</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="edu-grid">
+    <div class="edu-card primary reveal">
+      <div class="edu-inst">Woxsen University</div>
+      <div class="edu-degree">Master of Business Administration</div>
+      <div class="edu-details">
+        General Management · Finance Specialisation<br>
+        Batch 2025–2027 · Pass out 2027
+      </div>
+      <div class="edu-cgpa">In Progress</div>
+      <div class="edu-cgpa-label">Current Pursuit</div>
+    </div>
+    <div class="edu-card reveal reveal-delay-1">
+      <div class="edu-inst">Sri Krishna Veni Degree Kalasala</div>
+      <div class="edu-degree">Bachelor of Commerce — General</div>
+      <div class="edu-details">B.Com General · 2022–2025</div>
+      <div class="edu-cgpa">7.03</div>
+      <div class="edu-cgpa-label">CGPA</div>
+    </div>
+    <div class="edu-card reveal reveal-delay-2">
+      <div class="edu-inst">Nalanda Vidya Niketan</div>
+      <div class="edu-degree">Pre-University Education</div>
+      <div class="edu-details">Secondary Schooling</div>
+      <div class="edu-cgpa">7.02</div>
+      <div class="edu-cgpa-label">CGPA</div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="reveal">
+    <h2 class="contact-headline">Let's <em>Connect</em></h2>
+    <p class="contact-sub">Open to finance internship opportunities, collaborative projects, and meaningful conversations about markets and analytics.</p>
+    <div class="contact-links">
+      <a href="mailto:lakshmiabhinayanelanutala@gmail.com" class="contact-link">
+        <span>✉</span> Email Me
+      </a>
+      <a href="https://www.linkedin.com/in/abhinaya-nelanutala-7461a3376" target="_blank" class="contact-link">
+        <span>in</span> LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <span class="footer-text">© 2025 <span class="footer-gold">Nelanutala Lakshmi Abhinaya</span></span>
+  <span class="footer-text">MBA · Finance & Analytics · Woxsen University</span>
+</footer>
+
+<script>
+  // === Custom Cursor ===
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  });
+
+  (function animRing() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    cursorRing.style.left = rx + 'px'; cursorRing.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+
+  document.querySelectorAll('a, button, .project-card, .cert-item, .stat-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '6px'; cursor.style.height = '6px';
+      cursorRing.style.width = '56px'; cursorRing.style.height = '56px';
+      cursorRing.style.opacity = '0.8';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '10px'; cursor.style.height = '10px';
+      cursorRing.style.width = '36px'; cursorRing.style.height = '36px';
+      cursorRing.style.opacity = '0.5';
+    });
+  });
+
+  // === Scroll Reveal ===
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // === Active Nav ===
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--gold)' : '';
+    });
+  });
+</script>
+</body>
+</html>
